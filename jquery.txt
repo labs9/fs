@@ -1,0 +1,87 @@
+Write a program to create and Build a Password Strength Check using Jquery.
+P5.html
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;title&gt;Password Strength Checker&lt;/title&gt;
+&lt;style&gt;
+  .password-strength {
+    margin-top: 10px;
+    padding: 5px;
+    width: 250px;
+    font-size: 14px;
+  }
+  .strength-meter {
+    height: 20px;
+    margin-top: 15px;
+  }
+  .very-weak { background-color: #ff4d4d; }
+  .weak { background-color: #ffa500; }
+  .medium { background-color: #ffd700; }
+  .strong { background-color: #7fff00; }
+  .very-strong { background-color: #00ff00; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div&gt;
+  &lt;label for=&quot;password&quot;&gt;Enter your password:&lt;/label&gt;
+  &lt;input type=&quot;password&quot; id=&quot;password&quot; name=&quot;password&quot; /&gt;
+&lt;/div&gt;
+&lt;div class=&quot;password-strength&quot;&gt;
+  &lt;div class=&quot;strength-meter&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script src=&quot;https://code.jquery.com/jquery-3.6.0.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;strengthchecker.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+strengthchecker.js
+$(document).ready(function() {
+    $(&#39;#password&#39;).on(&#39;input&#39;, function() {
+      var password = $(this).val();
+      var meter = $(&#39;.strength-meter&#39;);
+      var strength = 0;
+      var progressClass = &#39;&#39;;
+ 
+      // Check length
+      if (password.length &gt; 8) {
+        strength += 1;
+      }
+ 
+      // Check if password contains uppercase letter
+      if (password.match(/[A-Z]/)) {
+        strength += 1;
+      }
+ 
+      // Check if password contains lowercase letter
+      if (password.match(/[a-z]/)) {
+        strength += 1;
+      }
+ 
+      // Check if password contains number
+      if (password.match(/\d/)) {
+        strength += 1;
+      }
+ 
+      // Check if password contains special character
+      if (password.match(/[!@#$%^&amp;*(),.?&quot;:{}|&lt;&gt;]/)) {
+        strength += 1;
+      }
+ 
+      // Determine progress bar class
+      switch(strength) {
+        case 0: progressClass = &#39;very-weak&#39;; break;
+        case 1: progressClass = &#39;weak&#39;; break;
+        case 2: progressClass = &#39;medium&#39;; break;
+        case 3: progressClass = &#39;strong&#39;; break;
+        case 4: progressClass = &#39;very-strong&#39;; break;
+        default: progressClass = &#39;very-weak&#39;;
+      }
+
+ 
+      // Update progress bar
+      meter.removeClass().addClass(&#39;strength-meter&#39;).addClass(progressClass);
+    });
+  });
