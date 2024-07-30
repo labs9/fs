@@ -1,0 +1,145 @@
+4. Demonstrate Accessing MongoDB from Node.js. for College Database
+and students Collection with four CRUD operations Insert, Delete , Update
+and Find.
+const { MongoClient, ObjectID, ObjectId } = require(&#39;mongodb&#39;);
+
+// Connection URL
+const url = &#39;mongodb://localhost:27017&#39;;
+
+// Database Name
+const dbName = &#39;College&#39;;
+
+// Create a new MongoClient
+const client = new MongoClient(url, { useNewUrlParser: true,
+useUnifiedTopology: true });
+
+// Connect to the MongoDB server
+async function connectDB() {
+    try {
+        await client.connect();
+        console.log(&#39;Connected to the database&#39;);
+    } catch (error) {
+        console.error(&#39;Error connecting to the database:&#39;, error);
+    }
+}
+   // Insert operation (Create)
+async function insertStudent(student) {
+    const db = client.db(dbName);
+    try {
+
+    const result = await db.collection(&#39;students&#39;).insertOne(student);
+    console.log(`Student with id ${result.insertedId} inserted successfully`);
+    } catch (err) {
+      console.error(&#39;Error inserting student:&#39;, err);
+    }
+}
+
+    // Update operation
+    async function updateStudent() {
+        const db = client.db(dbName);
+        try {
+        const result = await db.collection(&#39;students&#39;).updateOne(
+            {_id:new
+ObjectId(&#39;66667a24ace74f68b2cdcdf6&#39;)},{$set:{Dept:&quot;CSE&quot;}});
+            console.log(`Student data updated successfully`);
+        } catch (err) {
+          console.error(&#39;Error updating student:&#39;, err);
+        }
+    }
+     
+// Find all students
+async function findAllStudents() {
+        const db = client.db(dbName);
+        try {
+        const students = await db.collection(&#39;students&#39;).find({}).toArray();
+        console.log(&#39;All students:&#39;, students);
+        } catch (err) {
+          console.error(&#39;Error finding students:&#39;, err);
+
+        }
+    }
+   
+// Delete operation
+async function deleteStudent(Id) {
+    const db = client.db(dbName);
+    try {
+    const result = await db.collection(&#39;students&#39;).deleteOne({ _id:new
+ObjectId(Id) });
+    console.log(`Student with id ${Id} deleted successfully`);
+    } catch (err) {
+      console.error(&#39;Error deleting student:&#39;, err);
+    }
+}
+  // Perform operations (uncomment as needed for demonstration)
+  connectDB()
+  .then(async () =&gt; {
+
+  // Insert a student
+  const exampleStudent = { name: &#39;Monisha&#39;, age: 18, cgpa:6.38, Dept:&quot;CSE&quot;};
+  await insertStudent(exampleStudent);
+
+  // Find all students
+  await findAllStudents();
+
+  // Update a student
+  await updateStudent();
+
+  // Delete a student
+  const studentIdToDelete = &#39;666bea5ca3a164ff0e37ba34&#39;; // Replace with an
+existing student id
+  await deleteStudent(studentIdToDelete);
+ 
+  // Close the connection
+  client.close();
+});
+
+Output: node App.js
+Connected to the database
+Student with id 667050dfabccee4a53178857 inserted successfully
+All students: [
+{
+_id: new ObjectId(&#39;6666613b0f47808a70cdcdfa&#39;),
+age: 18,
+Fulltime: false,
+Feespaid: true,
+name: &#39;Anu&#39;,
+cgpa: 8.25
+},
+{
+_id: new ObjectId(&#39;66667a24ace74f68b2cdcdf6&#39;),
+name: &#39;Manasa&#39;,
+age: 30,
+cgpa: 8.45,
+Fulltime: false,
+Feespaid: true
+
+},
+{
+_id: new ObjectId(&#39;66681a00a4f0630ab8cdcdf6&#39;),
+name: &#39;Kavya&#39;,
+age: 30,
+cgpa: 7.5,
+FullTime: true
+},
+{
+_id: new ObjectId(&#39;666bea5ca3a164ff0e37ba34&#39;),
+name: &#39;Jhonny&#39;,
+age: 20,
+grade: &#39;A&#39;
+},
+{
+_id: new ObjectId(&#39;66703c8053328e5f062f99e5&#39;),
+name: &#39;John Doe&#39;,
+age: 20,
+grade: &#39;A&#39;
+},
+_id: new ObjectId(&#39;667050dfabccee4a53178857&#39;),
+name: &#39;Monisha&#39;,
+age: 18,
+cgpa: 6.38,
+Dept: &#39;CSE&#39;
+}
+]
+
+Student data updated successfully
+Student with id 666bea5ca3a164ff0e37ba34 deleted successfully
